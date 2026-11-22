@@ -1,4 +1,5 @@
-# Karte im Dashboard: Bearbeiten → Karte hinzufügen → "Manuell" → einfügen
+# Einfacher geht es mit dem grafischen Editor (Karte hinzufügen → "Temperatur Übersicht").
+# Alternativ: Karte hinzufügen → "Manuell" → diesen Text einfügen
 # Entity-IDs an deine Sensoren anpassen. "climate", "heating" und "window" sind optional.
 
 type: custom:temperatur-uebersicht-card

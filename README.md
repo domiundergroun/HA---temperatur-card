@@ -1,4 +1,4 @@
-# Temperatur Übersicht Card (v1.2.1)
+# Temperatur Übersicht Card (v1.3.0)
 
 Eine Lovelace-Karte für Home Assistant, die alles in einem Stück anzeigt:
 - **Oben:** Außentemperatur, rechts daneben die Luftfeuchtigkeit
@@ -20,12 +20,25 @@ Die Karte braucht keine HACS-Abhängigkeiten wie Mushroom.
 ## Manuelle Installation
 1. Kopiere `temperatur-uebersicht-card.js` nach `/config/www/`, zum Beispiel mit dem File-Editor- oder Samba-Add-on.
 2. Gehe zu **Einstellungen → Dashboards → ⋮ → Ressourcen → Ressource hinzufügen**:
-   - URL: `/local/temperatur-uebersicht-card.js?v=1.2.1`
+   - URL: `/local/temperatur-uebersicht-card.js?v=1.3.0`
    - Typ: **JavaScript-Modul**
 3. Lade die Seite neu. Leere in der App falls nötig den Cache.
 4. Gehe im Dashboard zu **Karte hinzufügen → Manuell** und füge den Inhalt aus `beispiel-konfiguration.yaml` ein.
 
 Bei einem Update erhöhst du die `?v=`-Nummer in der Ressourcen-URL, damit der Browser die neue Version lädt.
+
+## Karte einfügen und einrichten (ohne YAML)
+1. Dashboard → **✏️ Bearbeiten → Karte hinzufügen** → nach **„Temperatur Übersicht“** suchen.
+2. Unter **Allgemein** wählst du die Sensoren für Außentemperatur und Luftfeuchtigkeit aus.
+3. Unter **Räume** tippst du auf **„Raum hinzufügen“** und wählst dann:
+   - Symbol
+   - Temperatursensor
+   - Luftfeuchtigkeitssensor
+   - optional Thermostat und Fenstersensor(en)
+4. Mit den Pfeilen änderst du die Reihenfolge, mit dem Papierkorb löschst du einen Raum.
+5. Tippe auf **Speichern**.
+
+Wer lieber YAML nutzt, findet ein Beispiel in `beispiel-konfiguration.yaml`.
 
 ## Optionen
 | Option | Beschreibung | Standard |

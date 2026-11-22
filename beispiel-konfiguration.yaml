@@ -1,0 +1,59 @@
+# Karte im Dashboard: Bearbeiten → Karte hinzufügen → "Manuell" → einfügen
+# Entity-IDs an deine Sensoren anpassen. "climate", "heating" und "window" sind optional.
+
+type: custom:temperatur-uebersicht-card
+outdoor:
+  temperature: sensor.aussen_temperatur
+  humidity: sensor.aussen_luftfeuchtigkeit
+columns: 3              # Kacheln pro Zeile
+humidity_warning: 65    # ab diesem Wert wird die Luftfeuchtigkeit rot
+
+rooms:
+  - name: Wohnzimmer            # wird nicht angezeigt, nur als Tooltip
+    icon: mdi:sofa
+    temperature: sensor.wohnzimmer_temperatur
+    humidity: sensor.wohnzimmer_luftfeuchtigkeit
+    climate: climate.wohnzimmer          # Heizen = hvac_action "heating"
+    window: binary_sensor.wohnzimmer_fenster
+
+  - name: Küche
+    icon: mdi:fridge
+    temperature: sensor.kueche_temperatur
+    humidity: sensor.kueche_luftfeuchtigkeit
+    climate: climate.kueche
+    window: binary_sensor.kueche_fenster
+
+  - name: Schlafzimmer
+    icon: mdi:bed
+    temperature: sensor.schlafzimmer_temperatur
+    humidity: sensor.schlafzimmer_luftfeuchtigkeit
+    climate: climate.schlafzimmer
+    window:                               # mehrere Fenster möglich
+      - binary_sensor.schlafzimmer_fenster_links
+      - binary_sensor.schlafzimmer_fenster_rechts
+    min: 16
+    max: 20
+
+  - name: Bad
+    icon: mdi:bathtub
+    temperature: sensor.bad_temperatur
+    humidity: sensor.bad_luftfeuchtigkeit
+    climate: climate.bad
+    window: binary_sensor.bad_fenster
+    min: 20
+    max: 24
+    humidity_warning: 70
+
+  - name: Arbeitszimmer
+    icon: mdi:laptop
+    temperature: sensor.arbeitszimmer_temperatur
+    humidity: sensor.arbeitszimmer_luftfeuchtigkeit
+    climate: climate.arbeitszimmer
+    window: binary_sensor.arbeitszimmer_fenster
+
+  - name: Speisekammer
+    icon: mdi:package-variant
+    temperature: sensor.speisekammer_temperatur
+    humidity: sensor.speisekammer_luftfeuchtigkeit
+    min: 10
+    max: 18

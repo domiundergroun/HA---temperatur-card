@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.3.0";
+const CARD_VERSION = "1.4.0";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -165,9 +165,9 @@ class TemperaturUebersichtCard extends HTMLElement {
       <style>${STYLES}</style>
       <ha-card>
         ${!hasOutdoor ? "" : `<div class="hero" style="--oc:${this._outdoorColor(outT)}" data-entity="${esc(c.outdoor?.temperature || c.weather || "")}">
-          <div class="cond-icon"><ha-icon icon="mdi:thermometer"></ha-icon></div>
+          <div class="cond-icon"><ha-icon icon="${Number.isFinite(outT) && outT <= 0 ? "mdi:snowflake" : "mdi:flower"}"></ha-icon></div>
           <div class="temp">${fmt(outT)}<span class="u">°C</span></div>
-          ${Number.isFinite(outH) ? `<div class="hum"><ha-icon icon="mdi:water-outline"></ha-icon>${fmt(outH, 0)}<span class="u">%</span></div>` : ""}
+          ${Number.isFinite(outH) ? `<div class="hum"><ha-icon icon="mdi:water"></ha-icon>${fmt(outH, 0)}<span class="u">%</span></div>` : ""}
         </div>`}
         ${c.rooms.length ? "" : '<div class="empty">Noch keine Räume – füge sie über „Bearbeiten“ im Karten-Editor hinzu.</div>'}
         <div class="rooms" style="--cols:${c.columns};${c.temperature_color ? `--tu-temp-color:${esc(c.temperature_color)}` : ""}">${roomsHtml}</div>
@@ -199,6 +199,7 @@ const STYLES = `
   .temp .u { font-size: 20px; margin-left: 2px; color: var(--secondary-text-color); vertical-align: top; }
   .hum {
     display: flex; align-items: center; gap: 2px;
+    background: none; border: none; box-shadow: none; padding: 0; border-radius: 0;
     color: var(--secondary-text-color);
     font-size: 24px; font-weight: 400; white-space: nowrap;
   }

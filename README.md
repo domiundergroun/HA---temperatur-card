@@ -1,9 +1,9 @@
-# Temperatur Übersicht Card (v1.4.0)
+# Temperatur Übersicht Card (v1.5.0)
 
 Eine Lovelace-Karte für Home Assistant, die alles in einem Stück anzeigt:
 - **Oben:** Außentemperatur, rechts daneben die Luftfeuchtigkeit
   - Symbol: 🌼 Blume über 0 °C, ❄️ Schneeflocke bei 0 °C oder weniger
-- **Darunter:** Raumkacheln nur mit Symbol, Temperatur und Luftfeuchtigkeit
+- **Darunter:** Raumkacheln: links das Symbol, rechts Temperatur und Luftfeuchtigkeit
   - Die Temperaturzahl hat dieselbe Farbe wie das Raumsymbol
   - Farbe nach Temperatur: blau = zu kalt, grün = angenehm, orange/rot = zu warm
   - 🪟 oben links, blau = Fenster offen
@@ -21,7 +21,7 @@ Die Karte braucht keine HACS-Abhängigkeiten wie Mushroom.
 ## Manuelle Installation
 1. Kopiere `temperatur-uebersicht-card.js` nach `/config/www/`, zum Beispiel mit dem File-Editor- oder Samba-Add-on.
 2. Gehe zu **Einstellungen → Dashboards → ⋮ → Ressourcen → Ressource hinzufügen**:
-   - URL: `/local/temperatur-uebersicht-card.js?v=1.4.0`
+   - URL: `/local/temperatur-uebersicht-card.js?v=1.5.0`
    - Typ: **JavaScript-Modul**
 3. Lade die Seite neu. Leere in der App falls nötig den Cache.
 4. Gehe im Dashboard zu **Karte hinzufügen → Manuell** und füge den Inhalt aus `beispiel-konfiguration.yaml` ein.
@@ -46,7 +46,7 @@ Wer lieber YAML nutzt, findet ein Beispiel in `beispiel-konfiguration.yaml`.
 |---|---|---|
 | `outdoor.temperature` / `outdoor.humidity` | Außensensoren | – |
 | `weather` | optional: Wetter-Entität als Ersatz, wenn keine Außensensoren angegeben sind | – |
-| `columns` | Kacheln pro Zeile | 3 |
+| `columns` | Kacheln pro Zeile | 2 |
 | `humidity_warning` | Warngrenze für die Luftfeuchtigkeit in % | 65 |
 | `temperature_color` | feste Farbe für die Raumtemperaturen, z. B. `"#ffffff"` (ohne Angabe passt sich die Farbe an den Raumstatus an) | – |
 

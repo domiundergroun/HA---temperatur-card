@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.4.0";
+const CARD_VERSION = "1.5.0";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -28,12 +28,12 @@ class TemperaturUebersichtCard extends HTMLElement {
   }
 
   static getStubConfig() {
-    return { columns: 3, rooms: [] };
+    return { columns: 2, rooms: [] };
   }
 
   setConfig(config) {
     if (!config) throw new Error("Ungültige Konfiguration");
-    this._config = { columns: 3, humidity_warning: 65, ...config, rooms: Array.isArray(config.rooms) ? config.rooms : [] };
+    this._config = { columns: 2, humidity_warning: 65, ...config, rooms: Array.isArray(config.rooms) ? config.rooms : [] };
     if (!this.shadowRoot) this.attachShadow({ mode: "open" });
     this._lastKey = null;
     if (this._hass) this.hass = this._hass;
@@ -50,7 +50,7 @@ class TemperaturUebersichtCard extends HTMLElement {
   }
 
   getCardSize() {
-    const rows = Math.ceil(Math.max(this._config.rooms.length, 1) / (this._config.columns || 3));
+    const rows = Math.ceil(Math.max(this._config.rooms.length, 1) / (this._config.columns || 2));
     return 2 + rows * 2;
   }
 
@@ -151,12 +151,14 @@ class TemperaturUebersichtCard extends HTMLElement {
           ${windowOpen ? '<ha-icon class="badge left win" icon="mdi:window-open-variant"></ha-icon>' : ""}
           ${heating ? '<ha-icon class="badge right heat" icon="mdi:fire"></ha-icon>' : ""}
           <div class="ico-wrap"><ha-icon class="ico" icon="${esc(r.icon || "mdi:home")}"></ha-icon></div>
-          <div class="t">${fmt(t)}<span class="u">°C</span></div>
-          ${
-            r.humidity
-              ? `<div class="h${wet ? " wet" : ""}"><ha-icon icon="${wet ? "mdi:water-alert" : "mdi:water-outline"}"></ha-icon>${fmt(h, 0)} %</div>`
-              : ""
-          }
+          <div class="info">
+            <div class="t">${fmt(t)}<span class="u">°C</span></div>
+            ${
+              r.humidity
+                ? `<div class="h${wet ? " wet" : ""}"><ha-icon icon="${wet ? "mdi:water-alert" : "mdi:water-outline"}"></ha-icon>${fmt(h, 0)} %</div>`
+                : ""
+            }
+          </div>
         </div>`;
       })
       .join("");
@@ -210,21 +212,22 @@ const STYLES = `
   .hero + .rooms, .hero + .empty { margin-top: 20px; }
   .rooms { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 10px; }
   .room {
-    position: relative; cursor: pointer; border-radius: 18px; padding: 14px 6px 12px;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    position: relative; cursor: pointer; border-radius: 18px; padding: 12px 12px;
+    display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0;
     background: rgba(127,127,127,.08);
     background: color-mix(in srgb, var(--c) 11%, transparent);
     transition: transform .15s ease;
   }
   .room:active { transform: scale(.96); }
   .ico-wrap {
-    width: 42px; height: 42px; border-radius: 50%;
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     background: color-mix(in srgb, var(--c) 20%, transparent); color: var(--c);
   }
   .ico { --mdc-icon-size: 24px; }
+  .info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .t {
-    font-size: 21px; font-weight: 700; margin-top: 4px; white-space: nowrap;
+    font-size: 21px; font-weight: 700; line-height: 1.15; white-space: nowrap;
     color: var(--tu-temp-color, var(--c));
     color: var(--tu-temp-color, color-mix(in srgb, var(--c) 75%, var(--primary-text-color)));
   }
@@ -234,11 +237,12 @@ const STYLES = `
   .h.wet { color: var(--tu-wet); font-weight: 500; }
 
   .badge {
-    position: absolute; top: 7px; --mdc-icon-size: 14px; width: 22px; height: 22px; border-radius: 50%;
+    position: absolute; top: 5px; --mdc-icon-size: 12px; width: 19px; height: 19px; border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--card-background-color, var(--ha-card-background, #fff));
     align-items: center; justify-content: center; color: #fff;
   }
-  .badge.left { left: 7px; }
-  .badge.right { right: 7px; }
+  .badge.left { left: 6px; }
+  .badge.right { right: 6px; }
   .heat { background: var(--tu-heat); animation: pulse 2s ease-in-out infinite; }
   .win { background: var(--tu-window); }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
@@ -421,7 +425,7 @@ class TemperaturUebersichtCardEditor extends HTMLElement {
       general.data = {
         outdoor_temperature: c.outdoor?.temperature,
         outdoor_humidity: c.outdoor?.humidity,
-        columns: c.columns ?? 3,
+        columns: c.columns ?? 2,
         humidity_warning: c.humidity_warning ?? 65,
         temperature_color: c.temperature_color,
       };

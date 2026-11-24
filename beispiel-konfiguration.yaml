@@ -6,7 +6,7 @@ type: custom:temperatur-uebersicht-card
 outdoor:
   temperature: sensor.aussen_temperatur
   humidity: sensor.aussen_luftfeuchtigkeit
-columns: 3              # Kacheln pro Zeile
+columns: 2              # Kacheln pro Zeile
 humidity_warning: 65    # ab diesem Wert wird die Luftfeuchtigkeit rot
 
 rooms:

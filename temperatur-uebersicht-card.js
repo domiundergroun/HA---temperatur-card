@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.5.0";
+const CARD_VERSION = "1.5.1";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -149,7 +149,7 @@ class TemperaturUebersichtCard extends HTMLElement {
         const wet = Number.isFinite(h) && h > (r.humidity_warning ?? c.humidity_warning);
         return `<div class="room${heating ? " heating" : ""}" style="--c:${color}" data-idx="${i}" title="${esc(r.name || "")}">
           ${windowOpen ? '<ha-icon class="badge left win" icon="mdi:window-open-variant"></ha-icon>' : ""}
-          ${heating ? '<ha-icon class="badge right heat" icon="mdi:fire"></ha-icon>' : ""}
+          ${heating ? '<ha-icon class="badge bottom-left heat" icon="mdi:fire"></ha-icon>' : ""}
           <div class="ico-wrap"><ha-icon class="ico" icon="${esc(r.icon || "mdi:home")}"></ha-icon></div>
           <div class="info">
             <div class="t">${fmt(t)}<span class="u">°C</span></div>
@@ -242,7 +242,7 @@ const STYLES = `
     align-items: center; justify-content: center; color: #fff;
   }
   .badge.left { left: 6px; }
-  .badge.right { right: 6px; }
+  .badge.bottom-left { top: auto; bottom: 5px; left: 6px; }
   .heat { background: var(--tu-heat); animation: pulse 2s ease-in-out infinite; }
   .win { background: var(--tu-window); }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }

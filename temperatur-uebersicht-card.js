@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.5.1";
+const CARD_VERSION = "1.6.0";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -168,8 +168,13 @@ class TemperaturUebersichtCard extends HTMLElement {
       <ha-card>
         ${!hasOutdoor ? "" : `<div class="hero" style="--oc:${this._outdoorColor(outT)}" data-entity="${esc(c.outdoor?.temperature || c.weather || "")}">
           <div class="cond-icon"><ha-icon icon="${Number.isFinite(outT) && outT <= 0 ? "mdi:snowflake" : "mdi:flower"}"></ha-icon></div>
-          <div class="temp">${fmt(outT)}<span class="u">°C</span></div>
-          ${Number.isFinite(outH) ? `<div class="hum"><ha-icon icon="mdi:water"></ha-icon>${fmt(outH, 0)}<span class="u">%</span></div>` : ""}
+          <div class="temp">
+            <span class="num">${fmt(outT)}</span>
+            <div class="side">
+              <span class="u">°C</span>
+              ${Number.isFinite(outH) ? `<div class="hum"><ha-icon icon="mdi:water"></ha-icon>${fmt(outH, 0)}<span class="hu">%</span></div>` : ""}
+            </div>
+          </div>
         </div>`}
         ${c.rooms.length ? "" : '<div class="empty">Noch keine Räume – füge sie über „Bearbeiten“ im Karten-Editor hinzu.</div>'}
         <div class="rooms" style="--cols:${c.columns};${c.temperature_color ? `--tu-temp-color:${esc(c.temperature_color)}` : ""}">${roomsHtml}</div>
@@ -188,7 +193,7 @@ const STYLES = `
   ha-card { padding: 20px 18px 18px; overflow: hidden; }
   ha-icon { display: inline-flex; }
 
-  .hero { display: flex; align-items: center; justify-content: center; gap: 18px; cursor: pointer; }
+  .hero { display: flex; align-items: center; justify-content: flex-start; gap: 14px; cursor: pointer; padding-left: 4px; }
   .cond-icon {
     width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
@@ -197,16 +202,17 @@ const STYLES = `
     color: var(--oc);
   }
   .cond-icon ha-icon { --mdc-icon-size: 30px; }
-  .temp { font-size: 44px; font-weight: 400; line-height: 1; color: var(--primary-text-color); white-space: nowrap; }
-  .temp .u { font-size: 20px; margin-left: 2px; color: var(--secondary-text-color); vertical-align: top; }
+  .temp { display: flex; align-items: stretch; gap: 4px; color: var(--primary-text-color); white-space: nowrap; }
+  .num { font-size: 48px; font-weight: 300; line-height: 1; }
+  .side { display: flex; flex-direction: column; justify-content: space-between; padding: 3px 0 2px; }
+  .side .u { font-size: 20px; line-height: 1; color: var(--secondary-text-color); }
   .hum {
-    display: flex; align-items: center; gap: 2px;
+    display: flex; align-items: center; gap: 1px; line-height: 1;
     background: none; border: none; box-shadow: none; padding: 0; border-radius: 0;
-    color: var(--secondary-text-color);
-    font-size: 24px; font-weight: 400; white-space: nowrap;
+    color: var(--secondary-text-color); font-size: 16px; font-weight: 400;
   }
-  .hum ha-icon { --mdc-icon-size: 22px; color: #039be5; }
-  .hum .u { font-size: 14px; margin-left: 2px; }
+  .hum ha-icon { --mdc-icon-size: 16px; color: #039be5; }
+  .hum .hu { font-size: 12px; margin-left: 1px; }
 
   .empty { color: var(--secondary-text-color); font-size: 14px; text-align: center; padding: 8px 0; }
   .hero + .rooms, .hero + .empty { margin-top: 20px; }

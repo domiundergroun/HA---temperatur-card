@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.6.0";
+const CARD_VERSION = "1.7.0";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -47,6 +47,36 @@ class TemperaturUebersichtCard extends HTMLElement {
       this._lastKey = key;
       this._render();
     }
+  }
+
+  connectedCallback() {
+    if (!this._ro && window.ResizeObserver) {
+      this._ro = new ResizeObserver(() => this._applyCols());
+    }
+    this._ro?.observe(this);
+  }
+
+  disconnectedCallback() {
+    this._ro?.disconnect();
+  }
+
+  /* Spaltenzahl an die Kartenbreite anpassen: "columns" ist das Maximum */
+  _cols() {
+    const max = Math.max(1, +this._config.columns || 2);
+    const w = this.clientWidth;
+    if (!w) return max;
+    const minTile = this._config.min_tile_width || 128;
+    const fit = Math.max(1, Math.floor((w - 36 + 10) / (minTile + 10)));
+    return Math.min(max, fit);
+  }
+
+  _applyCols() {
+    const el = this.shadowRoot?.querySelector(".rooms");
+    if (!el) return;
+    const cols = this._cols();
+    if (String(cols) !== el.style.getPropertyValue("--cols")) el.style.setProperty("--cols", cols);
+    const w = this.clientWidth;
+    el.classList.toggle("compact", !!w && (w - 36 - (cols - 1) * 10) / cols < 160);
   }
 
   getCardSize() {
@@ -177,19 +207,20 @@ class TemperaturUebersichtCard extends HTMLElement {
           </div>
         </div>`}
         ${c.rooms.length ? "" : '<div class="empty">Noch keine Räume – füge sie über „Bearbeiten“ im Karten-Editor hinzu.</div>'}
-        <div class="rooms" style="--cols:${c.columns};${c.temperature_color ? `--tu-temp-color:${esc(c.temperature_color)}` : ""}">${roomsHtml}</div>
+        <div class="rooms" style="--cols:${this._cols()};${c.temperature_color ? `--tu-temp-color:${esc(c.temperature_color)}` : ""}">${roomsHtml}</div>
       </ha-card>`;
 
     this.shadowRoot.querySelectorAll(".room").forEach((el) => {
       el.addEventListener("click", () => this._moreInfo(c.rooms[+el.dataset.idx].temperature));
     });
+    this._applyCols();
     const hero = this.shadowRoot.querySelector(".hero");
     if (hero) hero.addEventListener("click", () => this._moreInfo(hero.dataset.entity));
   }
 }
 
 const STYLES = `
-  :host { --tu-heat: #ff6d00; --tu-window: #039be5; --tu-wet: #e53935; }
+  :host { display: block; --tu-heat: #ff6d00; --tu-window: #039be5; --tu-wet: #e53935; }
   ha-card { padding: 20px 18px 18px; overflow: hidden; }
   ha-icon { display: inline-flex; }
 
@@ -218,8 +249,8 @@ const STYLES = `
   .hero + .rooms, .hero + .empty { margin-top: 20px; }
   .rooms { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 10px; }
   .room {
-    position: relative; cursor: pointer; border-radius: 18px; padding: 12px 12px;
-    display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0;
+    position: relative; cursor: pointer; border-radius: 18px; padding: 12px 10px 12px 12px;
+    display: flex; flex-direction: row; align-items: center; gap: 10px; min-width: 0; overflow: hidden;
     background: rgba(127,127,127,.08);
     background: color-mix(in srgb, var(--c) 11%, transparent);
     transition: transform .15s ease;
@@ -231,14 +262,20 @@ const STYLES = `
     background: color-mix(in srgb, var(--c) 20%, transparent); color: var(--c);
   }
   .ico { --mdc-icon-size: 24px; }
+  .compact .room { padding: 10px 8px 10px 10px; gap: 8px; border-radius: 16px; }
+  .compact .ico-wrap { width: 36px; height: 36px; }
+  .compact .ico { --mdc-icon-size: 20px; }
+  .compact .t { font-size: 18px; }
+  .compact .t .u { font-size: 11px; }
+  .compact .badge { --mdc-icon-size: 10px; width: 16px; height: 16px; }
   .info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .t {
-    font-size: 21px; font-weight: 700; line-height: 1.15; white-space: nowrap;
+    font-size: 20px; font-weight: 700; line-height: 1.15; white-space: nowrap;
     color: var(--tu-temp-color, var(--c));
     color: var(--tu-temp-color, color-mix(in srgb, var(--c) 75%, var(--primary-text-color)));
   }
   .t .u { font-size: 12px; font-weight: 500; margin-left: 1px; opacity: .8; }
-  .h { display: flex; align-items: center; gap: 2px; font-size: 12px; color: var(--secondary-text-color); }
+  .h { display: flex; align-items: center; gap: 2px; font-size: 12px; color: var(--secondary-text-color); white-space: nowrap; }
   .h ha-icon { --mdc-icon-size: 13px; }
   .h.wet { color: var(--tu-wet); font-weight: 500; }
 

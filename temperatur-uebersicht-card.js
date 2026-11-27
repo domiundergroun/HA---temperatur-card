@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.7.1";
+const CARD_VERSION = "1.7.2";
 
 const COLORS = {
   cold: "#4a9eed",

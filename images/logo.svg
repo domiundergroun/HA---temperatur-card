@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2F80ED"/>
-      <stop offset="1" stop-color="#1A4FA0"/>
+      <stop offset="0" stop-color="#4A4A4A"/>
+      <stop offset="1" stop-color="#1E1E1E"/>
     </linearGradient>
     <linearGradient id="merc" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0" stop-color="#FF6D00"/>
-      <stop offset="1" stop-color="#FFB300"/>
+      <stop offset="0" stop-color="#3C3C3C"/>
+      <stop offset="1" stop-color="#6E6E6E"/>
     </linearGradient>
   </defs>
 
@@ -18,16 +18,16 @@
         fill="#FFFFFF" opacity="0.96"/>
 
   <!-- Thermometer -->
-  <rect x="196" y="190" width="56" height="150" rx="28" fill="#E3EEFB"/>
-  <circle cx="224" cy="350" r="42" fill="#E3EEFB"/>
+  <rect x="196" y="190" width="56" height="150" rx="28" fill="#E6E6E6"/>
+  <circle cx="224" cy="350" r="42" fill="#E6E6E6"/>
   <rect x="211" y="232" width="26" height="110" rx="13" fill="url(#merc)"/>
-  <circle cx="224" cy="350" r="28" fill="#FF6D00"/>
-  <rect x="262" y="214" width="20" height="8" rx="4" fill="#9DB9DE"/>
-  <rect x="262" y="244" width="14" height="8" rx="4" fill="#9DB9DE"/>
-  <rect x="262" y="274" width="20" height="8" rx="4" fill="#9DB9DE"/>
+  <circle cx="224" cy="350" r="28" fill="#3C3C3C"/>
+  <rect x="262" y="214" width="20" height="8" rx="4" fill="#A8A8A8"/>
+  <rect x="262" y="244" width="14" height="8" rx="4" fill="#A8A8A8"/>
+  <rect x="262" y="274" width="20" height="8" rx="4" fill="#A8A8A8"/>
 
   <!-- Wassertropfen -->
   <path d="M322 236 C322 236 282 288 282 318 C282 341 300 358 322 358 C344 358 362 341 362 318 C362 288 322 236 322 236 Z"
-        fill="#039BE5"/>
+        fill="#5A5A5A"/>
   <path d="M304 318 C304 306 310 296 316 288" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.7"/>
 </svg>

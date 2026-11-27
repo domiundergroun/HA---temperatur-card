@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.7.2";
+const CARD_VERSION = "1.8.0";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -195,7 +195,7 @@ class TemperaturUebersichtCard extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
       <style>${STYLES}</style>
-      <ha-card>
+      <ha-card class="${c.colored ? "" : "mono"}">
         ${!hasOutdoor ? "" : `<div class="hero" style="--oc:${this._outdoorColor(outT)}" data-entity="${esc(c.outdoor?.temperature || c.weather || "")}">
           <div class="cond-icon"><ha-icon icon="${Number.isFinite(outT) && outT <= 0 ? "mdi:snowflake" : "mdi:flower"}"></ha-icon></div>
           <div class="temp">
@@ -288,6 +288,15 @@ const STYLES = `
   .badge.bottom-left { top: auto; bottom: 5px; left: 6px; }
   .heat { background: var(--tu-heat); animation: pulse 2s ease-in-out infinite; }
   .win { background: var(--tu-window); }
+  /* Ohne Farben (Standard) */
+  .mono .cond-icon { background: rgba(127,127,127,.14); color: var(--primary-text-color); }
+  .mono .hum ha-icon { color: var(--secondary-text-color); }
+  .mono .room { background: rgba(127,127,127,.09); }
+  .mono .ico-wrap { background: rgba(127,127,127,.16); color: var(--primary-text-color); }
+  .mono .t { color: var(--tu-temp-color, var(--primary-text-color)); }
+  .mono .h.wet { color: var(--primary-text-color); }
+  .mono .badge { background: var(--primary-text-color); color: var(--card-background-color, var(--ha-card-background, #fff)); }
+
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
 `;
 
@@ -305,6 +314,7 @@ const GENERAL_SCHEMA = [
       { name: "humidity_warning", selector: { number: { min: 30, max: 100, step: 1, mode: "box", unit_of_measurement: "%" } } },
     ],
   },
+  { name: "colored", selector: { boolean: {} } },
   { name: "temperature_color", selector: { text: {} } },
 ];
 
@@ -338,10 +348,12 @@ const GENERAL_LABELS = {
   outdoor_humidity: "Außen – Luftfeuchtigkeitssensor",
   columns: "Kacheln pro Zeile",
   humidity_warning: "Feuchte-Warnung ab",
+  colored: "Farbig anzeigen",
   temperature_color: "Feste Farbe für Raumtemperaturen (optional)",
 };
 const GENERAL_HELPERS = {
-  temperature_color: "Leer lassen = Farbe passend zum Raumstatus. Beispiel: #ffffff",
+  colored: "Aus = schlicht in Grautönen. An = Farben je nach Temperatur, Heizen und Fenster.",
+  temperature_color: "Leer lassen = Standardfarbe. Beispiel: #ffffff",
 };
 const ROOM_LABELS = {
   name: "Name (nur im Editor sichtbar)",
@@ -470,6 +482,7 @@ class TemperaturUebersichtCardEditor extends HTMLElement {
         outdoor_humidity: c.outdoor?.humidity,
         columns: c.columns ?? 2,
         humidity_warning: c.humidity_warning ?? 65,
+        colored: !!c.colored,
         temperature_color: c.temperature_color,
       };
     }
@@ -525,6 +538,8 @@ class TemperaturUebersichtCardEditor extends HTMLElement {
     const cfg = { ...this._config };
     if (Object.keys(outdoor).length) cfg.outdoor = outdoor;
     else delete cfg.outdoor;
+    if (v.colored) cfg.colored = true;
+    else delete cfg.colored;
     for (const k of ["columns", "humidity_warning", "temperature_color"]) {
       if (v[k] === undefined || v[k] === "" || v[k] === null) delete cfg[k];
       else cfg[k] = v[k];

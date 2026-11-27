@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.8.0";
+const CARD_VERSION = "1.8.1";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -288,14 +288,14 @@ const STYLES = `
   .badge.bottom-left { top: auto; bottom: 5px; left: 6px; }
   .heat { background: var(--tu-heat); animation: pulse 2s ease-in-out infinite; }
   .win { background: var(--tu-window); }
-  /* Ohne Farben (Standard) */
-  .mono .cond-icon { background: rgba(127,127,127,.14); color: var(--primary-text-color); }
+  /* Ohne Farben (Standard) – hell */
+  .mono .cond-icon { background: rgba(127,127,127,.07); color: var(--secondary-text-color); }
   .mono .hum ha-icon { color: var(--secondary-text-color); }
-  .mono .room { background: rgba(127,127,127,.09); }
-  .mono .ico-wrap { background: rgba(127,127,127,.16); color: var(--primary-text-color); }
-  .mono .t { color: var(--tu-temp-color, var(--primary-text-color)); }
+  .mono .room { background: rgba(127,127,127,.045); }
+  .mono .ico-wrap { background: rgba(127,127,127,.08); color: var(--secondary-text-color); }
+  .mono .t { color: var(--tu-temp-color, var(--primary-text-color)); font-weight: 500; }
   .mono .h.wet { color: var(--primary-text-color); }
-  .mono .badge { background: var(--primary-text-color); color: var(--card-background-color, var(--ha-card-background, #fff)); }
+  .mono .badge { background: #b0b0b0; color: #fff; }
 
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
 `;

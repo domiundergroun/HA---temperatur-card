@@ -3,7 +3,7 @@
  * Außentemperatur/-feuchtigkeit + Raumkacheln (Temperatur, Luftfeuchtigkeit,
  * Heiz-Status, Fenster-Status) in einer einzigen Karte.
  */
-const CARD_VERSION = "1.8.1";
+const CARD_VERSION = "1.9.0";
 
 const COLORS = {
   cold: "#4a9eed",
@@ -33,7 +33,7 @@ class TemperaturUebersichtCard extends HTMLElement {
 
   setConfig(config) {
     if (!config) throw new Error("Ungültige Konfiguration");
-    this._config = { columns: 2, humidity_warning: 65, ...config, rooms: Array.isArray(config.rooms) ? config.rooms : [] };
+    this._config = { columns: 2, humidity_warning: 60, ...config, rooms: Array.isArray(config.rooms) ? config.rooms : [] };
     if (!this.shadowRoot) this.attachShadow({ mode: "open" });
     this._lastKey = null;
     if (this._hass) this.hass = this._hass;
@@ -288,14 +288,16 @@ const STYLES = `
   .badge.bottom-left { top: auto; bottom: 5px; left: 6px; }
   .heat { background: var(--tu-heat); animation: pulse 2s ease-in-out infinite; }
   .win { background: var(--tu-window); }
-  /* Ohne Farben (Standard) – hell */
-  .mono .cond-icon { background: rgba(127,127,127,.07); color: var(--secondary-text-color); }
+  /* Standard-Stil: hell, Symbole dunkelblau */
+  .mono { --tu-icon: #1a3a6b; --tu-window: #fbc02d; --tu-heat: #fb8c00; --tu-wet: #e53935; }
+  .mono .cond-icon { background: rgba(127,127,127,.07); color: var(--tu-icon); }
   .mono .hum ha-icon { color: var(--secondary-text-color); }
   .mono .room { background: rgba(127,127,127,.045); }
-  .mono .ico-wrap { background: rgba(127,127,127,.08); color: var(--secondary-text-color); }
+  .mono .ico-wrap { background: rgba(127,127,127,.08); color: var(--tu-icon); }
   .mono .t { color: var(--tu-temp-color, var(--primary-text-color)); font-weight: 500; }
-  .mono .h.wet { color: var(--primary-text-color); }
-  .mono .badge { background: #b0b0b0; color: #fff; }
+  .mono .h.wet { color: var(--tu-wet); font-weight: 500; }
+  .mono .badge.win { background: var(--tu-window); color: #3e2f00; }
+  .mono .badge.heat { background: var(--tu-heat); color: #fff; }
 
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
 `;
@@ -481,7 +483,7 @@ class TemperaturUebersichtCardEditor extends HTMLElement {
         outdoor_temperature: c.outdoor?.temperature,
         outdoor_humidity: c.outdoor?.humidity,
         columns: c.columns ?? 2,
-        humidity_warning: c.humidity_warning ?? 65,
+        humidity_warning: c.humidity_warning ?? 60,
         colored: !!c.colored,
         temperature_color: c.temperature_color,
       };

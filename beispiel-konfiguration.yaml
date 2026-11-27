@@ -7,7 +7,7 @@ outdoor:
   temperature: sensor.aussen_temperatur
   humidity: sensor.aussen_luftfeuchtigkeit
 columns: 2              # Kacheln pro Zeile
-humidity_warning: 65    # ab diesem Wert wird die Luftfeuchtigkeit rot
+humidity_warning: 60    # über diesem Wert wird die Luftfeuchtigkeit rot
 
 rooms:
   - name: Wohnzimmer            # wird nicht angezeigt, nur als Tooltip
@@ -43,7 +43,6 @@ rooms:
     window: binary_sensor.bad_fenster
     min: 20
     max: 24
-    humidity_warning: 70
 
   - name: Arbeitszimmer
     icon: mdi:laptop
